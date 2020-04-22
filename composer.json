@@ -1,0 +1,25 @@
+{
+    "name": "barusp/aws-sample-phpunit-codebuild-test-reports",
+    "description": "AWS Sample for Showing PHP Unit Test Reports in CodeBuild",
+    "type": "project",
+    "require-dev": {
+        "phpunit/phpunit": "^9.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Petra Barus",
+            "email": "petra.barus@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        
+    },
+    "autoload": {
+        "psr-4": {
+            "MyApp\\": "src/",
+            "MyAppTests\\": "tests/"
+        }
+    }
+}

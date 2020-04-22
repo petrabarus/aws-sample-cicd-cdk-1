@@ -1,0 +1,26 @@
+version: '0.2'
+phases:
+  install:
+    runtime-versions:
+      php: '7.3'
+    commands:
+    - composer install --no-ansi --no-dev --no-interaction --no-plugins --no-progress --no-scripts --no-suggest --optimize-autoloader
+  pre_build:
+    commands:
+    - aws --version
+    - $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email |  sed 's|https://||')
+    - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+    - IMAGE_TAG=${COMMIT_HASH:=latest}
+  build:
+    commands:
+    - rm -r tests
+    - docker build -t $REPOSITORY_URI:latest .
+    - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+    - docker push $REPOSITORY_URI:latest
+    - docker push $REPOSITORY_URI:$IMAGE_TAG
+    - printf "[{\"name\":\"${CONTAINER_NAME}\",\"imageUri\":\"${REPOSITORY_URI}:latest\"}]" > imagedefinitions.json
+artifacts:
+  files:
+  - imagedefinitions.json
