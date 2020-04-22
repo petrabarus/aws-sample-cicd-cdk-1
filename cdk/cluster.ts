@@ -38,7 +38,7 @@ export class AppCluster extends cdk.Construct {
         });
         this.fargateService.targetGroup.configureHealthCheck(shortHealthCheck);
 
-        const protocol = elbv2.ApplicationProtocol.HTTPS;
+        const protocol = elbv2.ApplicationProtocol.HTTP;
         this.serviceUrl = protocol.toLowerCase() + '://' + this.fargateService.loadBalancer.loadBalancerDnsName; 
         new cdk.CfnOutput(this, 'ELBURL', { value: this.serviceUrl });
     }
